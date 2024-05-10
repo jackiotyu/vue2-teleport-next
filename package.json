@@ -5,6 +5,7 @@
   "main": "dist/vue2-teleport-next.cjs.js",
   "umd": "dist/vue2-teleport-next.umd.js",
   "module": "dist/vue2-teleport-next.es.js",
+  "types": "./dist/vue2-teleport-next.d.ts",
   "exports": {
     ".": {
       "types": "./dist/vue2-teleport-next.d.ts",
