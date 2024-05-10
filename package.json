@@ -1,0 +1,56 @@
+{
+  "name": "vue2-teleport-next",
+  "description": "a lightweight npm package designed to seamlessly integrate Vue 3's teleport component functionality into Vue 2 projects.",
+  "version": "0.0.1",
+  "main": "dist/vue2-teleport-next.cjs.js",
+  "umd": "dist/vue2-teleport-next.umd.js",
+  "module": "dist/vue2-teleport-next.es.js",
+  "exports": {
+    ".": {
+      "types": "./dist/vue2-teleport-next.d.ts",
+      "import": "./dist/vue2-teleport-next.es.js",
+      "require": "./dist/vue2-teleport-next.cjs.js"
+    }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jackiotyu/vue2-teleport-next.git"
+  },
+  "bugs": {
+    "url": "https://github.com/jackiotyu/vue2-teleport-next/issues"
+  },
+  "homepage": "https://github.com/jackiotyu/vue2-teleport-next#readme",
+  "keywords": [
+    "Vue2",
+    "Teleport"
+  ],
+  "author": "jackiotyu",
+  "license": "MIT",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "serve": "vite preview",
+    "prepublishOnly": "npm run build"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.24.5",
+    "@babel/preset-env": "^7.24.5",
+    "@rollup/plugin-babel": "^6.0.4",
+    "@rollup/plugin-commonjs": "^25.0.7",
+    "esbuild": "^0.21.1",
+    "eslint": "^9.2.0",
+    "eslint-plugin-vue": "^9.26.0",
+    "globals": "^15.2.0",
+    "typescript": "^5.4.5",
+    "typescript-eslint": "^7.8.0",
+    "vite": "^2.0.5",
+    "vite-plugin-dts": "^3.9.1",
+    "vite-plugin-vue2": "^2.0.1",
+    "vue": "^2.6.12",
+    "vue-template-compiler": "^2.7.14"
+  },
+  "files": [
+    "dist",
+    "lib"
+  ]
+}
