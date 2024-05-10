@@ -11,24 +11,25 @@ export default defineComponent({
     },
     directives: {
         fragments: {
-            inserted: function (el) {
-                const children = Array.from(el.children);
-                const parent = el.parentElement;
-                children.forEach((item) => {
-                    parent && parent.appendChild(item);
-                });
-                parent && parent.removeChild(el);
+            inserted: function (el, binding, vnode) {
+                const componentInstance = vnode.context as any;
+                componentInstance.getFragment();
+                let parent = el.parentElement;
+                // TODO 处理上一级是teleport的情况
+                // parent && parent.attributes[fragmentAttr]s
+                parent && parent.replaceChild(componentInstance.comment, el);
             },
         },
     },
     data() {
         const base = {
-            parentRoot: null,
-        } as { parentRoot: HTMLElement | null };
-        return Object.preventExtensions(base) ;
+            comment: document.createComment(fragmentAttr),
+        } as {
+            comment: Comment;
+        };
+        return Object.preventExtensions(base);
     },
     mounted() {
-        this.getParentRoot();
         this.handleCheck();
     },
     updated() {
@@ -58,8 +59,8 @@ export default defineComponent({
             this.disabled ? this.revert() : this.transfer();
         },
         revert() {
-            if (!this.parentRoot) return;
-            this.parentRoot.appendChild(this.getFragment());
+            // 把注释节点转为实际子节点
+            this.comment.parentNode?.insertBefore(this.getFragment(), this.comment);
         },
         transfer() {
             let targetEl = typeof this.to === 'string' ? document.querySelector(this.to) : this.to;
@@ -68,13 +69,13 @@ export default defineComponent({
         },
         // @ts-ignore
         getParentRoot(): HTMLElement {
-            let parent = this.$parent;
+            let parentNode = this.comment.parentNode;
             // @ts-ignore
-            while (parent && parent.$el && parent.$el.attributes[fragmentAttr]) {
-                parent = parent.$parent;
+            while (parentNode && parentNode.attributes[fragmentAttr]) {
+                parentNode = parentNode.parentNode;
             }
             // @ts-ignore
-            this.parentRoot = parent.$el || document.body as HTMLElement;
+            return parentNode || document.body as HTMLElement;
         },
     },
 });
