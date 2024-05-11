@@ -67,7 +67,6 @@ const Teleport = defineComponent({
     updated() {
         this.check();
     },
-    // eslint-disable-next-line vue/no-deprecated-destroyed-lifecycle
     beforeDestroy() {
         this.revert();
     },
@@ -85,8 +84,8 @@ const Teleport = defineComponent({
         },
         transfer() {
             const targetEl = typeof this.to === 'string' ? document.querySelector(this.to) : this.to;
-            if (!targetEl) return;
-            targetEl.appendChild(getFragment(this));
+            const fragment = getFragment(this);
+            targetEl && targetEl.appendChild(fragment);
         },
     },
 });

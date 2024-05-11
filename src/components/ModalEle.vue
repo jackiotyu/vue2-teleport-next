@@ -15,6 +15,9 @@
         model: {
             event: 'change-value',
             prop: 'value'
+        },
+        beforeDestroy() {
+            console.log('beforeDestroy')
         }
     }
 </script>
