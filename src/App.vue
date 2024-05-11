@@ -27,25 +27,26 @@
         <div class="target2">target node</div>
         <h1>1111</h1>
 
-        <button @click="modalOpen = true">Open full-screen modal! (With teleport!)</button>
+        <div class="modal-content" v-if="disabled">
+            <button @click="modalOpen = true">Open full-screen modal! (With teleport!)</button>
+            <button @click="disabledModal = !disabledModal">{{ disabledModal ? 'enabled' : 'disabled' }}</button>
 
-        <Teleport to="body">
-        <div v-show="modalOpen" class="modal">
-            <div v-if="modalOpen">
-            I'm a teleported modal! (My parent is "body")
-            <button @click="modalOpen = false">Close</button>
-            </div>
+            <Teleport to="body" :disabled="disabledModal">
+                <ModalEle v-model="modalOpen"></ModalEle>
+            </Teleport>
         </div>
-        </Teleport>
+        <h1>2222</h1>
     </div>
 </template>
 
 <script>
 import Teleport from '../lib/Teleport';
+import ModalEle from './components/ModalEle.vue';
 
 export default {
     components: {
         Teleport,
+        ModalEle,
     },
     data() {
         return {
@@ -53,6 +54,7 @@ export default {
             to2: 'body',
             disabled: true,
             disabled2: true,
+            disabledModal: false,
             modalOpen: false,
         };
     },

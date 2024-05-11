@@ -49,7 +49,6 @@ const Teleport = defineComponent({
                 // Inspire by https://stackoverflow.com/questions/47511674/a-way-to-render-multiple-root-elements-on-vuejs-with-v-for-directive
                 const componentInstance = vnode.context as unknown as TeleportInstance;
                 if (!componentInstance) return;
-                getFragment(componentInstance);
                 const parent = el.parentElement;
                 parent && parent.replaceChild(componentInstance.comment, el);
             },
@@ -69,7 +68,11 @@ const Teleport = defineComponent({
         this.check();
     },
     beforeUnmount() {
-        getFragment(this);
+        this.revert();
+    },
+    // eslint-disable-next-line vue/no-deprecated-destroyed-lifecycle
+    beforeDestroy() {
+        this.revert();
     },
     render(h) {
         return h('span', { directives: [{ name: 'fragments' }] }, this.$slots.default);
@@ -80,6 +83,7 @@ const Teleport = defineComponent({
         },
         revert() {
             // Insert slot children before comment node
+            // TODO No need to re-invoke if already inserted.
             this.comment.parentNode?.insertBefore(getFragment(this), this.comment);
         },
         transfer() {
