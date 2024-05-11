@@ -2,9 +2,14 @@ import { defineComponent, CreateComponentPublicInstance } from 'vue';
 
 type BaseData = {
     comment: Comment;
+    isV2TPN: true;
 };
-
-type TeleportInstance = CreateComponentPublicInstance<unknown, unknown, BaseData>;
+type TeleportNode = {
+    check: () => void;
+    transfer: () => void;
+    revert: () => void;
+};
+type TeleportInstance = CreateComponentPublicInstance<unknown, unknown, BaseData> & TeleportNode;
 
 const getComponentChildrenNode = (context: TeleportInstance): HTMLElement[] => {
     // @ts-expect-error must has children
@@ -16,7 +21,18 @@ const getFragment = (context: TeleportInstance): DocumentFragment => {
     // See https://developer.mozilla.org/en-US/docs/Web/API/DocumentFragment
     // Inspire by https://github.com/Mechazawa/vue2-teleport
     const fragment = document.createDocumentFragment();
-    getComponentChildrenNode(context).forEach((node) => fragment.appendChild(node));
+    const teleportNodes: TeleportInstance[] = [];
+    getComponentChildrenNode(context)
+        .map((ele) => {
+            // @ts-expect-error teleport
+            const vm: TeleportInstance | undefined = ele.__vue__;
+            if (!vm || !vm.isV2TPN) return ele;
+            teleportNodes.push(vm);
+            return vm.comment;
+        })
+        .forEach((node) => fragment.appendChild(node));
+    // Resolve the issue of teleport being directly inserted into another teleport
+    teleportNodes.forEach((teleport) => teleport.check());
     return fragment;
 };
 
@@ -35,7 +51,6 @@ const Teleport = defineComponent({
                 if (!componentInstance) return;
                 getFragment(componentInstance);
                 const parent = el.parentElement;
-                // TODO Should resolve direct parent is fragment node.
                 parent && parent.replaceChild(componentInstance.comment, el);
             },
         },
@@ -43,6 +58,7 @@ const Teleport = defineComponent({
     data() {
         const base = {
             comment: document.createComment('Teleport'),
+            isV2TPN: true,
         } as BaseData;
         return Object.preventExtensions(base);
     },

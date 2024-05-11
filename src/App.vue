@@ -17,9 +17,9 @@
                     333
                 </section>
             </transition>
-            <!-- <Teleport :to="to" :disabled="disabled">
+            <Teleport :to="to" :disabled="disabled">
                 <div>G</div>
-            </Teleport> -->
+            </Teleport>
         </Teleport>
         <h1>before</h1>
         <div class="target">target node</div>
