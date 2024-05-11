@@ -67,9 +67,6 @@ const Teleport = defineComponent({
     updated() {
         this.check();
     },
-    beforeUnmount() {
-        this.revert();
-    },
     // eslint-disable-next-line vue/no-deprecated-destroyed-lifecycle
     beforeDestroy() {
         this.revert();
