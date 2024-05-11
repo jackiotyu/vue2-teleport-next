@@ -6,35 +6,46 @@
         <button @click="onChangeTarget2">move 2 to {{ to2 }}</button>
         <button @click="to2 = 'body'">move 2 to body</button>
         <button @click="to2 = '.target2'">move 2 to target2</button>
-        <vue-teleport :to="to" :disabled="disabled">
+        <Teleport :to="to" :disabled="disabled">
             <div>A</div>
-            <section class="ddd">
-                222
-                <vue-teleport :to="to2" :disabled="disabled2">
-                    <div>D</div>
-                </vue-teleport>
-                333
-            </section>
-            <div>
-                <vue-teleport :to="to" :disabled="disabled">
-                    <div>G</div>
-                </vue-teleport>
-            </div>
-        </vue-teleport>
+            <transition>
+                <section class="ddd" v-show="true">
+                    222
+                    <Teleport :to="to2" :disabled="disabled2">
+                        <div>D</div>
+                    </Teleport>
+                    333
+                </section>
+            </transition>
+            <!-- <Teleport :to="to" :disabled="disabled">
+                <div>G</div>
+            </Teleport> -->
+        </Teleport>
         <h1>before</h1>
         <div class="target">target node</div>
         <h1>after</h1>
         <div class="target2">target node</div>
         <h1>1111</h1>
+
+        <button @click="modalOpen = true">Open full-screen modal! (With teleport!)</button>
+
+        <Teleport to="body">
+        <div v-show="modalOpen" class="modal">
+            <div v-if="modalOpen">
+            I'm a teleported modal! (My parent is "body")
+            <button @click="modalOpen = false">Close</button>
+            </div>
+        </div>
+        </Teleport>
     </div>
 </template>
 
 <script>
-import VueTeleport from '../lib/Teleport.vue';
+import Teleport from '../lib/Teleport';
 
 export default {
     components: {
-        VueTeleport,
+        Teleport,
     },
     data() {
         return {
@@ -42,6 +53,7 @@ export default {
             to2: 'body',
             disabled: true,
             disabled2: true,
+            modalOpen: false,
         };
     },
     methods: {
