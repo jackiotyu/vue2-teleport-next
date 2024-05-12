@@ -6,7 +6,6 @@ type ChildNode = CreateComponentPublicInstance<unknown, unknown> & {
 };
 type BaseData = {
     child: ChildNode;
-    isV2TPN: true;
 };
 
 const tag = 'Teleport';
@@ -33,7 +32,7 @@ const Teleport = defineComponent({
         // eslint-disable-next-line @typescript-eslint/no-this-alias
         const context = this;
         const child: ChildNode = new (this.$root.constructor as Vue.VueConstructor)({
-            name: 'TeleportChild',
+            name: tag + 'Child',
             // @ts-expect-error parent
             parent: this,
             data() {
@@ -58,7 +57,7 @@ const Teleport = defineComponent({
                 return this.com[0];
             },
         });
-        const base = { child, isV2TPN: true } as BaseData;
+        const base = { child } as BaseData;
         return Object.preventExtensions(base);
     },
     watch: {
