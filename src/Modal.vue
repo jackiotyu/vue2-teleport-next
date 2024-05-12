@@ -78,15 +78,15 @@ export default {
  * these styles.
  */
 
-.modal-enter-from {
+.modal-enter-active, .modal-leave-active {
   opacity: 0;
 }
 
-.modal-leave-to {
+.modal-enter, .modal-leave-to {
   opacity: 0;
 }
 
-.modal-enter-from .modal-container,
+.modal-enter-active .modal-container,
 .modal-leave-to .modal-container {
   -webkit-transform: scale(1.1);
   transform: scale(1.1);
