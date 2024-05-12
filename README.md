@@ -9,6 +9,12 @@ vue2-teleport-next is a lightweight npm package designed to seamlessly integrate
 - Compatible with existing Vue 2 codebases, requiring minimal changes for implementation.
 - Lightweight and easy to integrate into Vue 2 projects, enhancing codebase flexibility and maintainability.
 
+### Note
+**The component has a `multiSlot` prop.**
+- When set to `true`, it will receive all slot content, but an additional node will be added in the outer layer.
+- When set to `false`, no additional outer layer node will be added, but only the content of the first slot will be rendered.
+- The default is `false`.
+
 **Installation:**
 
 ```
@@ -18,29 +24,46 @@ npm install vue2-teleport-next
 **Usage:**
 
 ```html
-// In your Vue 2 component
 <template>
   <div>
-    <vue-teleport :to="elementSelector">
-      <!-- Your Vue2 component here -->
-    </vue-teleport>
+      <button @click="modalOpen = true">
+          Open full screen modal! (With teleport!)
+      </button>
+
+      <Teleport to="body">
+        <div v-if="modalOpen" class="modal">
+          <div>
+            I'm a teleported modal!
+            (My parent is "body")
+            <button @click="modalOpen = false">
+              Close
+            </button>
+          </div>
+        </div>
+      </Teleport>
   </div>
 </template>
 
 <script>
-import VueTeleport from 'vue2-teleport-next';
+import Teleport from 'vue2-teleport-next';
 
 export default {
   components: {
-    VueTeleport,
+    Teleport,
   },
   data() {
     return {
-      elementSelector: 'body', // selector of the target element or html element
-    };
-  },
-};
+      modalOpen: false
+    }
+  }
+}
 </script>
 ```
+
+| Prop Name  | Type                 | Description                  |
+|------------|----------------------|------------------------------|
+| to         | [String, HTMLElement]| Specifies the target route or element. |
+| disabled   | Boolean              | Indicates whether the component is disabled or not. |
+| multiSlot  | Boolean              | Indicates whether the component supports multiple slots or not. |
 
 Start leveraging the power of Vue 3's teleport component within your Vue 2 projects today with vue2-teleport-next!

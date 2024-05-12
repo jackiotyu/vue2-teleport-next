@@ -1,91 +1,103 @@
 import { defineComponent, CreateComponentPublicInstance } from 'vue';
-
+type ChildNode = CreateComponentPublicInstance<unknown, unknown> & {
+    com?: Vue.VNode[];
+    to: unknown;
+    disabled: unknown;
+    multiSlot: boolean;
+    setCom(slots: unknown, to: unknown, disabled: unknown, multiSlot: unknown): void;
+};
 type BaseData = {
-    comment: Comment;
+    child: ChildNode;
     isV2TPN: true;
 };
-type TeleportNode = {
-    check: () => void;
-    transfer: () => void;
-    revert: () => void;
-};
-type TeleportInstance = CreateComponentPublicInstance<unknown, unknown, BaseData> & TeleportNode;
 
-const getComponentChildrenNode = (context: TeleportInstance): HTMLElement[] => {
-    // @ts-expect-error must has children
-    return context!.$vnode!.componentOptions!.children.map((i) => i.elm).filter((i) => i);
-};
-
-const getFragment = (context: TeleportInstance): DocumentFragment => {
-    // Using a fragment is faster because it'll trigger only a single reflow
-    // See https://developer.mozilla.org/en-US/docs/Web/API/DocumentFragment
-    // Inspire by https://github.com/Mechazawa/vue2-teleport
-    const fragment = document.createDocumentFragment();
-    const teleportNodes: TeleportInstance[] = [];
-    getComponentChildrenNode(context)
-        .map((ele) => {
-            // @ts-expect-error teleport
-            const vm: TeleportInstance | undefined = ele.__vue__;
-            if (!vm || !vm.isV2TPN) return ele;
-            teleportNodes.push(vm);
-            return vm.comment;
-        })
-        .forEach((node) => fragment.appendChild(node));
-    // Resolve the issue of teleport being directly inserted into another teleport
-    teleportNodes.forEach((teleport) => teleport.check());
-    return fragment;
-};
+const tag = 'Teleport';
 
 const Teleport = defineComponent({
-    name: 'Teleport',
+    name: tag,
     abstract: true,
     props: {
         to: [String, HTMLElement],
         disabled: Boolean,
-    },
-    directives: {
-        fragments: {
-            inserted: function (el, binding, vnode) {
-                // Inspire by https://stackoverflow.com/questions/47511674/a-way-to-render-multiple-root-elements-on-vuejs-with-v-for-directive
-                const componentInstance = vnode.context as unknown as TeleportInstance;
-                if (!componentInstance) return;
-                const parent = el.parentElement;
-                parent && parent.replaceChild(componentInstance.comment, el);
-            },
-        },
+        /**
+         * When set to `true`, it will receive all slot content, but an additional node will be added in the outer.
+         * When set to `false`, no additional outer layer node will be added, but only the content of the first slot will be rendered.
+         * The default is `false`.
+         */
+        multiSlot: Boolean,
     },
     data() {
-        const base = {
-            comment: document.createComment('Teleport'),
-            isV2TPN: true,
-        } as BaseData;
+        // eslint-disable-next-line @typescript-eslint/no-this-alias
+        const context = this;
+        const child: ChildNode = new (this.$root.constructor as Vue.VueConstructor)({
+            name: 'TeleportChild',
+            // @ts-expect-error parent
+            parent: this,
+            data() {
+                return {
+                    com: context.$slots.default,
+                    to: context.to,
+                    disabled: context.disabled,
+                    multiSlot: context.multiSlot,
+                };
+            },
+            methods: {
+                setCom(
+                    slots: Vue.VNode[] | undefined,
+                    to: string | HTMLElement | undefined,
+                    disabled: boolean | undefined,
+                    multiSlot: boolean | undefined,
+                ) {
+                    // eslint-disable-next-line vue/no-mutating-props
+                    this.to = to;
+                    // eslint-disable-next-line vue/no-mutating-props
+                    this.disabled = disabled;
+                    // eslint-disable-next-line vue/no-mutating-props
+                    this.multiSlot = multiSlot;
+                    this.com = slots;
+                },
+            },
+            render(h) {
+                // TODO Need to remove root
+                if (this.multiSlot) return h('div', this.com);
+                return this.com[0];
+            },
+        });
+        const base = { child, isV2TPN: true } as BaseData;
         return Object.preventExtensions(base);
     },
-    mounted() {
-        this.check();
+    watch: {
+        to() {
+            this.check();
+        },
+        disabled() {
+            this.check();
+        },
     },
-    updated() {
-        this.check();
+    mounted() {
+        this.$el.textContent = tag;
+        this.$nextTick(() => {
+            this.child.$mount();
+            this.check();
+        });
     },
     beforeDestroy() {
-        this.revert();
+        this.child.$destroy();
+        this.child.$el.parentNode?.removeChild(this.child.$el);
     },
-    render(h) {
-        return h('span', { directives: [{ name: 'fragments' }] }, this.$slots.default);
+    render() {
+        this.child.setCom(this.$slots.default || [], this.to, this.disabled, this.multiSlot);
+        return null;
     },
     methods: {
         check() {
-            this.disabled ? this.revert() : this.transfer();
-        },
-        revert() {
-            // Insert slot children before comment node
-            // TODO No need to re-invoke if already inserted.
-            this.comment.parentNode?.insertBefore(getFragment(this), this.comment);
-        },
-        transfer() {
-            const targetEl = typeof this.to === 'string' ? document.querySelector(this.to) : this.to;
-            const fragment = getFragment(this);
-            targetEl && targetEl.appendChild(fragment);
+            this.child.$el.parentNode?.removeChild(this.child.$el);
+            if (this.disabled) {
+                this.$el.parentNode?.insertBefore(this.child.$el, this.$el);
+            } else {
+                const targetEl = typeof this.to === 'string' ? document.querySelector(this.to) : this.to;
+                targetEl && targetEl.appendChild(this.child.$el);
+            }
         },
     },
 });

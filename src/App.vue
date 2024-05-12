@@ -7,7 +7,7 @@
         <button @click="to2 = 'body'">move 2 to body</button>
         <button @click="to2 = '.target2'">move 2 to target2</button>
         <button @click="isHide = !isHide">toggle isHide {{ isHide }}</button>
-        <Teleport :to="to" :disabled="disabled">
+        <Teleport :to="to" :disabled="disabled" multiSlot>
             <div>A</div>
             <transition>
                 <section class="ddd" v-show="true">
@@ -31,7 +31,7 @@
                 <button @click="modalOpen = true">Open full-screen modal! (With teleport!)</button>
                 <button @click="disabledModal = !disabledModal">{{ disabledModal ? 'enabled' : 'disabled' }}</button>
                 <h2 v-if="!isHide">other1</h2>
-                <Teleport to="body" :disabled="disabledModal">
+                <Teleport to="body" :disabled="disabledModal" multiSlot>
                     <ModalEle v-model="modalOpen"></ModalEle>
                     <h2 v-if="!isHide">other2</h2>
                 </Teleport>
