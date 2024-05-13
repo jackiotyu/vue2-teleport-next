@@ -27,7 +27,7 @@ const Teleport = defineComponent({
     },
     data() {
         const child: ChildNode = new (this.$root.constructor as Vue.VueConstructor)({
-            name: tag + '-child',
+            name: tag + '-inner',
             // @ts-expect-error parent
             parent: this,
             abstract: true,
