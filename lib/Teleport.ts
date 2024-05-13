@@ -7,14 +7,11 @@ type ChildNode = CreateComponentPublicInstance<unknown, unknown> & {
 type BaseData = {
     child: ChildNode;
 };
-
-const tag = 'Teleport';
-
+const tag = 'teleport';
 const removeNode = (el: Node) => {
     const parentNode = el.parentNode;
     parentNode && parentNode.removeChild(el);
 }
-
 const Teleport = defineComponent({
     name: tag,
     abstract: true,
@@ -29,16 +26,15 @@ const Teleport = defineComponent({
         multiSlot: Boolean,
     },
     data() {
-        // eslint-disable-next-line @typescript-eslint/no-this-alias
-        const context = this;
         const child: ChildNode = new (this.$root.constructor as Vue.VueConstructor)({
-            name: tag + 'Child',
+            name: tag + '-child',
             // @ts-expect-error parent
             parent: this,
-            data() {
+            abstract: true,
+            data: () => {
                 return {
-                    com: context.$slots.default,
-                    multiSlot: context.multiSlot,
+                    com: this.$slots.default,
+                    multiSlot: this.multiSlot,
                 };
             },
             methods: {
@@ -65,7 +61,8 @@ const Teleport = defineComponent({
         disabled: 'check',
     },
     mounted() {
-        this.$el.textContent = tag;
+        this.$el.parentNode && this.$el.parentNode.insertBefore(document.createComment(tag + ' start'), this.$el)
+        this.$el.textContent = tag + ' end';
         this.$nextTick(() => {
             this.child.$mount();
             this.check();
