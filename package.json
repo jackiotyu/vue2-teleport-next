@@ -1,7 +1,7 @@
 {
   "name": "vue2-teleport-next",
   "description": "a lightweight npm package designed to seamlessly integrate Vue 3's teleport component functionality into Vue 2 projects.",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "main": "dist/vue2-teleport-next.cjs.js",
   "umd": "dist/vue2-teleport-next.umd.js",
   "module": "dist/vue2-teleport-next.es.js",
