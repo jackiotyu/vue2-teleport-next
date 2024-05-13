@@ -1,4 +1,12 @@
-# vue2-teleport-next
+<p align="center">
+<img src="./assets/icon.png" style="width:200px;" />
+</p>
+
+<h1 align="center">vue2-teleport-next</h1>
+
+![NPM Version](https://img.shields.io/npm/v/vue2-teleport-next)
+![NPM Downloads](https://img.shields.io/npm/dw/vue2-teleport-next)
+![GitHub License](https://img.shields.io/github/license/jackiotyu/vue2-teleport-next)
 
 vue2-teleport-next is a lightweight npm package designed to seamlessly integrate Vue 3's [teleport component](https://vuejs.org/guide/built-ins/teleport.html) functionality into Vue 2 projects. The teleport component, introduced in Vue 3, allows developers to dynamically render a child component to a target element anywhere in the DOM tree. This package serves as a bridge, enabling Vue 2 developers to leverage the powerful capabilities of Vue 3's teleport feature without the need for a full migration to Vue 3.
 
