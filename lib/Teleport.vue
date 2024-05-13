@@ -1,7 +1,7 @@
 <script lang="ts">
-import { CreateComponentPublicInstance } from 'vue';
+import { CreateComponentPublicInstance, VNode, VueConstructor } from 'vue';
 type ChildNode = CreateComponentPublicInstance<unknown, unknown> & {
-    com?: Vue.VNode[];
+    com?: VNode[];
     multiSlot: boolean;
     setCom(slots: unknown, multiSlot: unknown): void;
 };
@@ -12,7 +12,7 @@ const tag = 'teleport';
 const removeNode = (el: Node) => {
     const parentNode = el.parentNode;
     parentNode && parentNode.removeChild(el);
-}
+};
 export default {
     name: tag,
     abstract: true,
@@ -27,7 +27,7 @@ export default {
         multiSlot: Boolean,
     },
     data() {
-        const child: ChildNode = new (this.$root.constructor as Vue.VueConstructor)({
+        const child: ChildNode = new (this.$root.constructor as VueConstructor)({
             name: tag + '-inner',
             // @ts-expect-error parent
             parent: this,
@@ -39,10 +39,7 @@ export default {
                 };
             },
             methods: {
-                setCom(
-                    slots: Vue.VNode[] | undefined,
-                    multiSlot: boolean | undefined,
-                ) {
+                setCom(slots: VNode[] | undefined, multiSlot: boolean | undefined) {
                     // eslint-disable-next-line vue/no-mutating-props
                     this.multiSlot = multiSlot;
                     this.com = slots;
@@ -62,7 +59,8 @@ export default {
         disabled: 'check',
     },
     mounted() {
-        this.$el.parentNode && this.$el.parentNode.insertBefore(document.createComment(tag + ' start'), this.$el)
+        let parentNode = this.$el.parentNode;
+        parentNode && parentNode.insertBefore(document.createComment(tag + ' start'), this.$el);
         this.$el.textContent = tag + ' end';
         this.$nextTick(() => {
             this.child.$mount();
@@ -71,7 +69,7 @@ export default {
     },
     beforeDestroy() {
         this.child.$destroy();
-        removeNode(this.child.$el)
+        removeNode(this.child.$el);
     },
     render() {
         this.child.setCom(this.$slots.default || [], this.multiSlot);
@@ -79,7 +77,7 @@ export default {
     },
     methods: {
         check() {
-            removeNode(this.child.$el)
+            removeNode(this.child.$el);
             if (this.disabled) {
                 const parentNode = this.$el.parentNode;
                 parentNode && parentNode.insertBefore(this.child.$el, this.$el);
@@ -91,4 +89,3 @@ export default {
     },
 };
 </script>
-

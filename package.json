@@ -31,7 +31,8 @@
     "dev": "vite",
     "build": "vite build",
     "serve": "vite preview",
-    "prepublishOnly": "npm run build"
+    "prepublishOnly": "npm run build",
+    "lint": "eslint ./lib/**/*"
   },
   "devDependencies": {
     "@babel/core": "^7.24.5",
@@ -41,16 +42,14 @@
     "@typescript-eslint/eslint-plugin": "^7.8.0",
     "@typescript-eslint/parser": "^7.8.0",
     "esbuild": "^0.21.1",
-    "eslint": "^9.2.0",
+    "eslint": "8",
     "eslint-plugin-vue": "^9.26.0",
     "globals": "^15.2.0",
     "typescript": "^5.4.5",
-    "typescript-eslint": "^7.8.0",
     "vite": "^2.0.5",
     "vite-plugin-dts": "^3.9.1",
     "vite-plugin-vue2": "^2.0.1",
     "vue": "^2.6.12",
-    "vue-eslint-parser": "^9.4.2",
     "vue-template-compiler": "^2.7.14"
   },
   "files": [
