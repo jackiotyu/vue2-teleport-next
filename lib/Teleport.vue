@@ -1,4 +1,5 @@
-import { defineComponent, CreateComponentPublicInstance } from 'vue';
+<script lang="ts">
+import { CreateComponentPublicInstance } from 'vue';
 type ChildNode = CreateComponentPublicInstance<unknown, unknown> & {
     com?: Vue.VNode[];
     multiSlot: boolean;
@@ -12,7 +13,7 @@ const removeNode = (el: Node) => {
     const parentNode = el.parentNode;
     parentNode && parentNode.removeChild(el);
 }
-const Teleport = defineComponent({
+export default {
     name: tag,
     abstract: true,
     props: {
@@ -88,6 +89,6 @@ const Teleport = defineComponent({
             }
         },
     },
-});
+};
+</script>
 
-export default Teleport;
