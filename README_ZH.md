@@ -12,18 +12,20 @@
 
 vue2-teleport-next 是一个轻量级的 npm 包，旨在将 Vue 3 的 [teleport 组件](https://cn.vuejs.org/guide/built-ins/teleport) 功能无缝集成到 Vue 2 项目中。teleport 组件是 Vue 3 的内置组件，允许开发人员将子组件动态渲染到 DOM 树中的任何位置。该包充当了一个桥梁，使 Vue 2 开发人员能够利用 Vue 3 的 teleport 功能的强大功能，而无需完全迁移到 Vue 3。
 
-**主要特性：**
+👉[演示地址](https://stackblitz.com/edit/vue2-vite-starter-85hxf5?file=src%2FApp.vue)
+
+**👍主要特性：**
 
 - 轻量且易于集成到 Vue 2 项目中，为 Vue 2 开发人员提供逐步采用 Vue 3 特性的无缝过渡。
 - 使用vue2的虚拟dom实现，性能出色
 
-**安装：**
+**📦安装：**
 
 ```
 npm install vue2-teleport-next
 ```
 
-**用法：**
+**🫱用法：**
 
 ```html
 <template>
@@ -68,10 +70,10 @@ export default {
 | disabled   | Boolean                | 指示组件是否禁用。        |
 | multiSlot  | Boolean                | 指示组件是否支持多个插槽。|
 
-### 注意
+### ❗注意
 **该组件有一个 `multiSlot` 属性。**
 - 当设置为 `true` 时，它将接收所有插槽内容，但会在外层添加一个额外的节点。
 - 当设置为 `false` 时，不会添加额外的外层节点，而只会渲染第一个插槽的内容。
 - 默认值为 `false`。
 
-通过 vue2-teleport-next 在您的 Vue 2 项目中无缝使用 Vue 3 teleport 组件的强大功能！
+🚀通过 vue2-teleport-next 在您的 Vue 2 项目中无缝使用 Vue 3 teleport 组件的强大功能吧！

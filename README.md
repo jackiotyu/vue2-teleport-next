@@ -12,18 +12,20 @@ English | [中文文档](./README_ZH.md)
 
 vue2-teleport-next is a lightweight npm package designed to seamlessly integrate Vue 3's [teleport component](https://vuejs.org/guide/built-ins/teleport.html) functionality into Vue 2 projects. The teleport component, introduced in Vue 3, allows developers to dynamically render a child component to a target element anywhere in the DOM tree. This package serves as a bridge, enabling Vue 2 developers to leverage the powerful capabilities of Vue 3's teleport feature without the need for a full migration to Vue 3.
 
-**Key Features:**
+👉[Demo](https://stackblitz.com/edit/vue2-vite-starter-85hxf5?file=src%2FApp.vue)
+
+**👍Key Features:**
 
 - Lightweight and easy to integrate into Vue 2 projects, providing Vue 2 developers with a seamless transition to gradually adopt Vue 3 features.
 - Implemented using Vue 2's virtual DOM, it delivers excellent performance.
 
-**Installation:**
+**📦Installation:**
 
 ```
 npm install vue2-teleport-next
 ```
 
-**Usage:**
+**🫱Usage:**
 
 ```html
 <template>
@@ -68,10 +70,10 @@ export default {
 | disabled   | Boolean              | Indicates whether the component is disabled or not. |
 | multiSlot  | Boolean              | Indicates whether the component supports multiple slots or not. |
 
-### Note
+### ❗Note
 **The component has a `multiSlot` prop.**
 - When set to `true`, it will receive all slot content, but an additional node will be added in the outer layer.
 - When set to `false`, no additional outer layer node will be added, but only the content of the first slot will be rendered.
 - The default is `false`.
 
-Start leveraging the power of Vue 3's teleport component within your Vue 2 projects today with vue2-teleport-next!
+🚀Start leveraging the power of Vue 3's teleport component within your Vue 2 projects today with vue2-teleport-next!
