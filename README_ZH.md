@@ -1,5 +1,5 @@
 <p align="center">
-<img src="./assets/icon.png" style="width:200px;" />
+<img src="https://cdn.jsdelivr.net/gh/jackiotyu/vue2-teleport-next@1.0.2/assets/icon.png" style="width:200px;" />
 </p>
 
 <h1 align="center">vue2-teleport-next</h1>
