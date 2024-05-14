@@ -44,7 +44,7 @@
 </template>
 
 <script>
-import Teleport from '../lib/Teleport';
+import Teleport from '../lib/Teleport.vue';
 import ModalEle from './components/ModalEle.vue';
 
 export default {

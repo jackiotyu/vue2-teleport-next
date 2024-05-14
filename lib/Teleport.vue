@@ -17,7 +17,10 @@ export default {
     name: tag,
     abstract: true,
     props: {
-        to: [String, HTMLElement],
+        to: {
+            type: [String, HTMLElement],
+            required: true,
+        },
         disabled: Boolean,
         /**
          * When set to `true`, it will receive all slot content, but an additional node will be added in the outer.
@@ -68,8 +71,8 @@ export default {
         });
     },
     beforeDestroy() {
-        this.child.$destroy();
         removeNode(this.child.$el);
+        this.child.$destroy();
     },
     render() {
         this.child.setCom(this.$slots.default || [], this.multiSlot);
