@@ -7,6 +7,7 @@ type ChildNode = CreateComponentPublicInstance<unknown, unknown> & {
 };
 type BaseData = {
     child: ChildNode;
+    end: Comment,
 };
 const tag = 'teleport';
 const removeNode = (el: Node) => {
@@ -33,7 +34,7 @@ export default {
         const child: ChildNode = new (this.$root.constructor as VueConstructor)({
             name: tag + '-inner',
             // @ts-expect-error parent
-            parent: this,
+            parent: this.$parent,
             abstract: true,
             data: () => {
                 return {
@@ -54,7 +55,8 @@ export default {
                 return this.com[0];
             },
         });
-        const base = { child } as BaseData;
+        const end = document.createComment(tag + ' end');
+        const base = { child, end } as BaseData;
         return Object.preventExtensions(base);
     },
     watch: {
@@ -63,8 +65,8 @@ export default {
     },
     mounted() {
         let parentNode = this.$el.parentNode;
-        parentNode && parentNode.insertBefore(document.createComment(tag + ' start'), this.$el);
-        this.$el.textContent = tag + ' end';
+        parentNode && parentNode.insertBefore(this.end, this.$el.nextSibling);
+        this.$el.textContent = tag + ' start';
         this.$nextTick(() => {
             this.child.$mount();
             this.check();
@@ -72,6 +74,7 @@ export default {
     },
     beforeDestroy() {
         removeNode(this.child.$el);
+        removeNode(this.end);
         this.child.$destroy();
     },
     render() {
@@ -83,7 +86,7 @@ export default {
             removeNode(this.child.$el);
             if (this.disabled) {
                 const parentNode = this.$el.parentNode;
-                parentNode && parentNode.insertBefore(this.child.$el, this.$el);
+                parentNode && parentNode.insertBefore(this.child.$el, this.$el.nextSibling);
             } else {
                 const targetEl = typeof this.to === 'string' ? document.querySelector(this.to) : this.to;
                 targetEl && targetEl.appendChild(this.child.$el);

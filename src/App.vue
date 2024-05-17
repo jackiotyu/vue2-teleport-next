@@ -7,6 +7,9 @@
         <button @click="to2 = 'body'">move 2 to body</button>
         <button @click="to2 = '.target2'">move 2 to target2</button>
         <button @click="isHide = !isHide">toggle isHide {{ isHide }}</button>
+        <button @click="onUnshift">unshift</button>
+        <button @click="onPush">push</button>
+
         <Teleport :to="to" :disabled="disabled" multiSlot>
             <div>A</div>
             <transition>
@@ -25,19 +28,17 @@
         <h1>before</h1>
         <div class="target">target node</div>
         <h1>after</h1>
-        <div class="target2">
-            <h1>target node2</h1>
-            <div class="modal-content" v-if="disabled">
-                <button @click="modalOpen = true">Open full-screen modal! (With teleport!)</button>
-                <button @click="disabledModal = !disabledModal">{{ disabledModal ? 'enabled' : 'disabled' }}</button>
-                <h2 v-if="!isHide">other1</h2>
-                <Teleport to="body" :disabled="disabledModal" multiSlot>
-                    <ModalEle v-model="modalOpen"></ModalEle>
-                    <h2 v-if="!isHide">other2</h2>
-                </Teleport>
-            </div>
+        <div class="modal-content" v-if="disabled">
+            <button @click="modalOpen = true">Open full-screen modal! (With teleport!)</button>
+            <button @click="disabledModal = !disabledModal">{{ disabledModal ? 'enabled' : 'disabled' }}</button>
+            <p v-for="i in list" :key="`list${i}`">{{ i }}</p>
+            <h2 v-if="!isHide">other1</h2>
+            <Teleport to="body" :disabled="disabledModal" multiSlot>
+                <ModalEle v-model="modalOpen"></ModalEle>
+                <h2 v-if="!isHide">other2</h2>
+            </Teleport>
+            <p v-for="i in list" :key="`list2${i}`">{{ i }}</p>
         </div>
-
         <h1>2222</h1>
         <h1>1111</h1>
     </div>
@@ -61,6 +62,7 @@ export default {
             disabledModal: false,
             modalOpen: false,
             isHide: false,
+            list: ['list'],
         };
     },
     methods: {
@@ -77,6 +79,12 @@ export default {
             this.isHide = !this.isHide;
             this.to2 = this.to2 === 'body' ? '.target2' : 'body';
         },
+        onUnshift() {
+            this.list.unshift(Math.random());
+        },
+        onPush() {
+            this.list.push(Math.random());
+        }
     },
 };
 </script>

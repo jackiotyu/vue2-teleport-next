@@ -6,6 +6,9 @@ import { getBabelOutputPlugin } from '@rollup/plugin-babel';
 import { createVuePlugin } from 'vite-plugin-vue2';
 
 module.exports = defineConfig({
+    server: {
+        host: '0.0.0.0',
+    },
     plugins: [
         createVuePlugin(),
         dts({
