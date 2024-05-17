@@ -9,7 +9,9 @@
         <button @click="isHide = !isHide">toggle isHide {{ isHide }}</button>
         <button @click="onUnshift">unshift</button>
         <button @click="onPush">push</button>
-
+        <button @click="onPop">pop</button>
+        <button @click="onShift">shift</button>
+        <h1>t1</h1>
         <Teleport :to="to" :disabled="disabled" multiSlot>
             <div>A</div>
             <transition>
@@ -25,6 +27,7 @@
                 <div>G</div>
             </Teleport>
         </Teleport>
+        <h1>t1</h1>
         <h1>before</h1>
         <div class="target">target node</div>
         <h1>after</h1>
@@ -84,6 +87,12 @@ export default {
         },
         onPush() {
             this.list.push(Math.random());
+        },
+        onPop() {
+            this.list.pop();
+        },
+        onShift() {
+            this.list.shift();
         }
     },
 };

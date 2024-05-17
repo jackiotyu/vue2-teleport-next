@@ -7,11 +7,10 @@ type ChildNode = CreateComponentPublicInstance<unknown, unknown> & {
 };
 type BaseData = {
     child: ChildNode;
-    end: Comment,
 };
 const tag = 'teleport';
 const removeNode = (el: Node) => {
-    const parentNode = el.parentNode;
+    const parentNode = el && el.parentNode;
     parentNode && parentNode.removeChild(el);
 };
 export default {
@@ -55,8 +54,7 @@ export default {
                 return this.com[0];
             },
         });
-        const end = document.createComment(tag + ' end');
-        const base = { child, end } as BaseData;
+        const base = { child } as BaseData;
         return Object.preventExtensions(base);
     },
     watch: {
@@ -64,9 +62,7 @@ export default {
         disabled: 'check',
     },
     mounted() {
-        let parentNode = this.$el.parentNode;
-        parentNode && parentNode.insertBefore(this.end, this.$el.nextSibling);
-        this.$el.textContent = tag + ' start';
+        this.$el.textContent = tag;
         this.$nextTick(() => {
             this.child.$mount();
             this.check();
@@ -74,22 +70,26 @@ export default {
     },
     beforeDestroy() {
         removeNode(this.child.$el);
-        removeNode(this.end);
         this.child.$destroy();
     },
     render() {
+        // fix order after siblings change.
+        if (this.disabled && (this.$el || {}).previousSibling !== this.child.$el) this.check();
         this.child.setCom(this.$slots.default || [], this.multiSlot);
         return null;
     },
     methods: {
         check() {
-            removeNode(this.child.$el);
+            const rootEl = this.$el;
+            const childEl = this.child.$el;
+            if (!rootEl || !childEl) return;
+            removeNode(childEl);
             if (this.disabled) {
-                const parentNode = this.$el.parentNode;
-                parentNode && parentNode.insertBefore(this.child.$el, this.$el.nextSibling);
+                const parentNode = rootEl && rootEl.parentNode;
+                parentNode && parentNode.insertBefore(childEl, rootEl);
             } else {
                 const targetEl = typeof this.to === 'string' ? document.querySelector(this.to) : this.to;
-                targetEl && targetEl.appendChild(this.child.$el);
+                targetEl && targetEl.appendChild(childEl);
             }
         },
     },
