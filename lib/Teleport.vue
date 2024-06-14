@@ -30,7 +30,7 @@ export default {
         multiSlot: Boolean,
     },
     data() {
-        const child: ChildNode = new (this.$root.constructor as VueConstructor)({
+        const child: ChildNode = new (this.constructor as VueConstructor)({
             name: tag + '-inner',
             // @ts-expect-error parent
             parent: this.$parent,
